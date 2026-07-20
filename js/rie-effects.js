@@ -42,4 +42,37 @@
       if (current >= target) clearInterval(timer);
     }, 35);
   });
+
+  // Click the portrait to toggle her "反転" (Reversal) enhanced form.
+  const swap = wrap.querySelector('.portrait-swap');
+  if (swap) {
+    const civilian = swap.querySelector('.img-civilian');
+    const reversed = swap.querySelector('.img-magical');
+    const label = wrap.querySelector('.swap-label');
+    let isReversed = false;
+
+    const toggle = () => {
+      isReversed = !isReversed;
+      civilian.classList.toggle('is-hidden', isReversed);
+      reversed.classList.toggle('is-hidden', !isReversed);
+      swap.setAttribute('aria-pressed', String(isReversed));
+      wrap.classList.toggle('is-reversed', isReversed);
+      readout.innerHTML = isReversed
+        ? 'REVERSAL: ACTIVE<span class="cursor"></span>'
+        : 'ANALYZING TARGET<span class="cursor"></span>';
+      if (label) label.textContent = isReversed ? 'CLICK: 解除' : 'CLICK: 反転発動！';
+      swap.classList.remove('is-flash');
+      void swap.offsetWidth;
+      swap.classList.add('is-flash');
+    };
+
+    swap.addEventListener('click', toggle);
+    swap.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        toggle();
+      }
+    });
+  }
 })();
+
